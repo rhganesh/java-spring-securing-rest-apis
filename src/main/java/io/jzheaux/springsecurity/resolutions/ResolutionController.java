@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
@@ -28,8 +29,9 @@ public class ResolutionController {
 	@PreAuthorize("hasAuthority('resolution:read')")
 	@PostAuthorize("@post.authorize(#root)")
 	@PostFilter("@post.filter(#root)")
-	public Optional<Resolution> read(@PathVariable("id") UUID id) {
-		return this.resolutions.findById(id);
+	@CrossOrigin(allowCredentials = "true")
+	public Iterable<Resolution> read(@PathVariable("id") UUID id) {
+		return this.resolutions.findById(id).stream().collect(Collectors.toList());
 	}
 
 	@PostMapping("/resolution")
@@ -42,7 +44,7 @@ public class ResolutionController {
 	@PutMapping(path="/resolution/{id}/revise")
 	@PostAuthorize("@post.authorize(#root)")
 	@Transactional
-	public Optional<Resolution> revise(@PathVariable("id") UUID id, @RequestBody String text) {
+	public Iterable<Resolution> revise(@PathVariable("id") UUID id, @RequestBody String text) {
 		this.resolutions.revise(id, text);
 		return read(id);
 	}
@@ -50,7 +52,7 @@ public class ResolutionController {
 	@PutMapping("/resolution/{id}/complete")
 	@PostAuthorize("@post.authorize(#root)")
 	@Transactional
-	public Optional<Resolution> complete(@PathVariable("id") UUID id) {
+	public Iterable<Resolution> complete(@PathVariable("id") UUID id) {
 		this.resolutions.complete(id);
 		return read(id);
 	}
