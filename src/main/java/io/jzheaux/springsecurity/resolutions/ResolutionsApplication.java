@@ -26,13 +26,14 @@ public class ResolutionsApplication extends WebSecurityConfigurerAdapter {
 	UserDetailsService userDetailsService(UserRepository users) {
 		return new UserRepositoryUserDetailsService(users);
 	}
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 				.authorizeRequests(authz -> authz
-						.mvcMatchers(HttpMethod.GET
-								, "/resolutions", "/resolution/**").hasAuthority("resolution:read")
+						.mvcMatchers(HttpMethod.GET, "/resolutions", "/resolution/**").hasAuthority("resolution:read")
 						.anyRequest().hasAuthority("resolution:write"))
 				.httpBasic(basic -> {});
 	}
+
 }

@@ -37,7 +37,8 @@ public class UserRepositoryUserDetailsService  implements UserDetailsService{
         @Override
         public Collection<? extends GrantedAuthority> getAuthorities() {
             return this.userAuthorities.stream()
-                    .map(a -> new SimpleGrantedAuthority(a.authority))
+                    .map(UserAuthority::getAuthority)
+                    .map(SimpleGrantedAuthority::new)
                     .collect(Collectors.toList());
         }
 
