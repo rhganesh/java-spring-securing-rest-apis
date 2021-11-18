@@ -29,7 +29,7 @@ public class ResolutionController {
 	@PreAuthorize("hasAuthority('resolution:read')")
 	@PostAuthorize("@post.authorize(#root)")
 	@PostFilter("@post.filter(#root)")
-	@CrossOrigin(allowCredentials = "true")
+	@CrossOrigin
 	public Iterable<Resolution> read(@PathVariable("id") UUID id) {
 		return this.resolutions.findById(id).stream().collect(Collectors.toList());
 	}
